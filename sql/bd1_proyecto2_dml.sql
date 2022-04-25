@@ -1,3 +1,6 @@
+#--------------------------INICIALIZAR EL AUTO INCREMENT DE PERSONA
+ALTER TABLE PERSONA AUTO_INCREMENT = 1000000;
+
 #--------------------------ESTADOS QUE TENDRAN LOS MATRIMONIOS
 INSERT INTO ESTADO_MATRIMONIO (nombre_estado_matrimonio) VALUES ('Activo');
 INSERT INTO ESTADO_MATRIMONIO (nombre_estado_matrimonio) VALUES ('Inactivo');
@@ -28,6 +31,7 @@ SELECT * FROM MUNICIPIO;
 #-------------------------ESTADOS DE LAS LICENCIAS
 INSERT INTO ESTADO_LICENCIA (nombre_estado_licencia) VALUES ('Activa');
 INSERT INTO ESTADO_LICENCIA (nombre_estado_licencia) VALUES ('Vencida');
+INSERT INTO ESTADO_LICENCIA (nombre_estado_licencia) VALUES ('Anulada');
 
 #-------------------------TIPOS DE LICENCIAS
 INSERT INTO TIPO_LICENCIA (nombre_tipo_licencia) VALUES ('A');

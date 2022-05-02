@@ -1,6 +1,6 @@
 #**********************************REGISTRAR NACIMIENTO****************************************
 #Regisro valido
-CALL registrarNacimiento(1000000010101,1000020020402,'Joan','Adalberto','Romeo','22-06-2021',612,'M');
+CALL registrarNacimiento(1000000010101,1000020020402,'Joan','Adalberto','Romeo','22-06-1988',612,'M');
 
 #Nombre obligatorio
 CALL registrarNacimiento(1000000010101,1000020020402,'','Adalberto','Romeo','22-06-2022',612,'M');
@@ -96,20 +96,23 @@ CALL renewLicencia(14,'12-11-2021','B',1);
 
 
 #**********************************GENERAR DPI*************************************************
-#NACIO EN 1993
+#NACIO EN 1993 Y EL OTRO EN 1988
 SELECT * FROM DPI WHERE id_persona = 1000047;
 #VALIDACION DE FECHA
 CALL generarDpi(1000047031503,'30-08-2000',610);
+CALL generarDpi(1000048061206,'30-08-1987',610);
 #CORRECTA
 CALL generarDpi(1000047031503,'30-08-2017',610);
+CALL generarDpi(1000048061206,'30-08-2008',610);
 #ESTADO SOLTERO
 SELECT * FROM PERSONA WHERE cui = '1000047031503';
+SELECT * FROM PERSONA WHERE cui = '1000048061206';
 #**********************************************************************************************
 
 
 #*************************************REPORTES*************************************************
 CALL getNacimiento(1000048061206);
-CALL getDpi(1000047031503);
+CALL getDpi(1000048061206);
 CALL getLicencias(1000044030903);
 CALL getDivorcio(16);
 CALL getDefuncion(1000041031503);

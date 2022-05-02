@@ -46,7 +46,7 @@ INSERT INTO ESTADO_ANULACION (nombre_estado_anulacion) VALUES ('Finalizada');
 #-------------------------
 
 #-------------------------CREAR PERSONAS PADRES BASE
-CALL crearPersonaSinPadres('Fernando','José','','Torres','Sanz','12-01-1995',101,'M');
+CALL crearPersonaSinPadres('Fernando','José','','Torres','Sanz','12-01-1965',101,'M');
 CALL crearPersonaSinPadres('David','','','Villa','Sánchez','12-02-1995',102,'M');
 CALL crearPersonaSinPadres('Andrés','Israel','','Iniesta','Luján','12-03-1995',103,'M');
 CALL crearPersonaSinPadres('Xavier','Carlos','','Hernández','Creus','12-04-1995',104,'M');
@@ -66,7 +66,7 @@ CALL crearPersonaSinPadres('José','Luis','','Sánchez','Hernández','12-05-1996
 CALL crearPersonaSinPadres('Karim','Esteban','','Benzema','Pogba','12-06-1996',201,'M');
 CALL crearPersonaSinPadres('Luka','Manuel','','Modric','Valverde','12-07-1996',202,'M');
 CALL crearPersonaSinPadres('Gareth','Frank','','Bale','Smith','12-08-1996',203,'M');
-CALL crearPersonaSinPadres('Angelina','Fernanda','','Jolie','Voight','12-09-1996',204,'F');
+CALL crearPersonaSinPadres('Angelina','Fernanda','','Jolie','Voight','12-09-1966',204,'F');
 CALL crearPersonaSinPadres('Emily','Jean','','Stone','Roberts','12-10-1996',205,'F');
 CALL crearPersonaSinPadres('Emma','Charlotte','','Duerre','Lacaz','12-11-1996',206,'F');
 CALL crearPersonaSinPadres('Jennifer','Amanda','','Shrader','Lawrence','12-12-1996',207,'F');
@@ -106,7 +106,7 @@ CALL crearPersonaSinPadres('Rudy','','','Rosales','Alvarez','02-02-1993',315,'M'
 
 
 #HOMBRES
-CALL generarDpi(1000000010101,'21-01-2017',401);
+CALL generarDpi(1000000010101,'21-01-1987',401);
 CALL generarDpi(1000001010201,'22-02-2017',402);
 CALL generarDpi(1000002010301,'23-03-2017',403);
 CALL generarDpi(1000003010401,'24-04-2017',404);
@@ -128,7 +128,7 @@ CALL generarDpi(1000018020202,'09-07-2018',503);
 CALL generarDpi(1000019020302,'10-08-2018',504);
 
 #MUJERES
-CALL generarDpi(1000020020402,'11-09-2018',505);
+CALL generarDpi(1000020020402,'11-09-1988',505);
 CALL generarDpi(1000021020502,'12-10-2018',506);
 CALL generarDpi(1000022020602,'13-11-2018',507);
 CALL generarDpi(1000023020702,'14-12-2018',508);

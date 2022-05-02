@@ -58,7 +58,7 @@ this_proc:BEGIN
     
     #--------------------------------------------------------------------------------------
     #Verificar error en primer nombre
-	SET caracteresNoPermitidos = (SELECT REGEXP_INSTR(primerNombreIN, '[^a-zA-ZÁÉÍÓÚáéíóú]'));
+	SET caracteresNoPermitidos = (SELECT REGEXP_INSTR(primerNombreIN, '[^a-zA-ZÁÉÍÓÚáéíóúñ]'));
 	IF caracteresNoPermitidos > 0 THEN
 		SET resultado := 'Error, caracteres inválidos en el primer nombre';
         SELECT resultado;
@@ -67,7 +67,7 @@ this_proc:BEGIN
     #--------------------------------------------------------------------------------------
     #--------------------------------------------------------------------------------------
     #Verificar error en segundo nombre
-	SET caracteresNoPermitidos = (SELECT REGEXP_INSTR(segundoNombreIN, '[^a-zA-ZÁÉÍÓÚáéíóú]'));
+	SET caracteresNoPermitidos = (SELECT REGEXP_INSTR(segundoNombreIN, '[^a-zA-ZÁÉÍÓÚáéíóúñ]'));
 	IF caracteresNoPermitidos > 0 THEN
 		SET resultado := 'Error, caracteres inválidos en el segundo nombre';
         SELECT resultado;
@@ -76,7 +76,7 @@ this_proc:BEGIN
     #--------------------------------------------------------------------------------------
     #--------------------------------------------------------------------------------------
     #Verificar error en tercer nombre
-	SET caracteresNoPermitidos = (SELECT REGEXP_INSTR(tercerNombreIN, '[^a-zA-ZÁÉÍÓÚáéíóú]'));
+	SET caracteresNoPermitidos = (SELECT REGEXP_INSTR(tercerNombreIN, '[^a-zA-ZÁÉÍÓÚáéíóúñ]'));
 	IF caracteresNoPermitidos > 0 THEN
 		SET resultado := 'Error, caracteres inválidos en el tercer nombre';
         SELECT resultado;
@@ -85,7 +85,7 @@ this_proc:BEGIN
     #--------------------------------------------------------------------------------------
     #--------------------------------------------------------------------------------------
     #Verificar error en primer apellido
-	SET caracteresNoPermitidos = (SELECT REGEXP_INSTR(primerApellidoIN, '[^a-zA-ZÁÉÍÓÚáéíóú]'));
+	SET caracteresNoPermitidos = (SELECT REGEXP_INSTR(primerApellidoIN, '[^a-zA-ZÁÉÍÓÚáéíóúñ]'));
 	IF caracteresNoPermitidos > 0 THEN
 		SET resultado := 'Error, caracteres inválidos en el primer apellido';
         SELECT resultado;
@@ -94,8 +94,10 @@ this_proc:BEGIN
     #--------------------------------------------------------------------------------------
     #--------------------------------------------------------------------------------------
     #Verificar error en segundo apellido
-	SET caracteresNoPermitidos = (SELECT REGEXP_INSTR(segundoApellidoIN, '[^a-zA-ZÁÉÍÓÚáéíóú]'));
-	IF caracteresNoPermitidos > 0 THEN
+    
+	SET caracteresNoPermitidos = (SELECT REGEXP_INSTR(segundoApellidoIN, '[^a-zA-ZÁÉÍÓÚáéíóúñ]'));
+	#select segundoApellidoIN,caracteresNoPermitidos;
+    IF caracteresNoPermitidos > 0 THEN
 		SET resultado := 'Error, caracteres inválidos en el segundo apellido';
         SELECT resultado;
 		LEAVE this_proc;
@@ -175,7 +177,7 @@ this_proc:BEGIN
     SET cuiDepartamento := CAST(id_departamentoIN AS CHAR(2));
     SET cuiDepartamento := (SELECT LPAD(cuiDepartamento, 2, 0));
     SET cuiNuevo := CONCAT(cuiRegistro,cuiMunicipio,cuiDepartamento);
-    select cuiRegistro,cuiMunicipio,cuiDepartamento,cuiNuevo;
+    #select cuiRegistro,cuiMunicipio,cuiDepartamento,cuiNuevo;
     #--------------------------------------------------------------------------------------
     #--------------------------------------------------------------------------------------
     #AGREGAR CUI AL REGISTRO
@@ -229,7 +231,8 @@ this_proc:BEGIN
     /************************************************************************/
 	
     /*********************GET EDAD ACTUAL DEL SOLICITANTE********************/
-    SET edadActual = (SELECT TIMESTAMPDIFF(YEAR, fechaNacimientoIN, curdate()));
+    #SET edadActual = (SELECT TIMESTAMPDIFF(YEAR, fechaNacimientoIN, curdate()));
+    SET edadActual = (SELECT TIMESTAMPDIFF(YEAR, fechaNacimientoIN, fechaEmisionConvertida));
     IF edadActual < 18 THEN
 		SET resultado := 'Error, la persona aun no ha cumplido 18 años.';
         SELECT resultado;
@@ -269,9 +272,9 @@ this_proc:BEGIN
     VALUES (fechaEmisionConvertida,municipioIN,id_personaIN);
     /************************************************************************/
     
-    SELECT * FROM DPI WHERE id_persona = id_personaIN;
-    SET resultado := 'DPI creado con éxito';
-    
+    #SELECT * FROM DPI WHERE id_persona = id_personaIN;
+    SET resultado := 'DPI generado con éxito';
+    SELECT resultado;
 END //
 DELIMITER ;
 #//////////////////////////////////////////////////////////////////////////////////////
@@ -317,7 +320,8 @@ this_proc:BEGIN
     DECLARE resultado VARCHAR(100);
     DECLARE genero INT;
 	DECLARE fechaNacimiento DATE;
-
+	DECLARE fechaActual DATE;
+    DECLARE fechaCorrecta INT;
 	#--------------------------------------------------------------------------------------
 	#VERIFICAR NOMBRES Y APELLIDOS OBLIGATORIOS
     IF primerNombreIN = '' THEN
@@ -329,7 +333,7 @@ this_proc:BEGIN
     
     #--------------------------------------------------------------------------------------
     #Verificar error en primer nombre
-	SET caracteresNoPermitidos = (SELECT REGEXP_INSTR(primerNombreIN, '[^a-zA-ZÁÉÍÓÚáéíóú]'));
+	SET caracteresNoPermitidos = (SELECT REGEXP_INSTR(primerNombreIN, '[^a-zA-ZÁÉÍÓÚáéíóúñ]'));
 	IF caracteresNoPermitidos > 0 THEN
 		SET resultado := 'Error, caracteres inválidos en el primer nombre';
         SELECT resultado;
@@ -339,7 +343,7 @@ this_proc:BEGIN
     
     #--------------------------------------------------------------------------------------
     #Verificar error en segundo nombre
-	SET caracteresNoPermitidos = (SELECT REGEXP_INSTR(segundoNombreIN, '[^a-zA-ZÁÉÍÓÚáéíóú]'));
+	SET caracteresNoPermitidos = (SELECT REGEXP_INSTR(segundoNombreIN, '[^a-zA-ZÁÉÍÓÚáéíóúñ]'));
 	IF caracteresNoPermitidos > 0 THEN
 		SET resultado := 'Error, caracteres inválidos en el segundo nombre';
         SELECT resultado;
@@ -349,7 +353,7 @@ this_proc:BEGIN
     
     #--------------------------------------------------------------------------------------
     #Verificar error en tercer nombre
-	SET caracteresNoPermitidos = (SELECT REGEXP_INSTR(tercerNombreIN, '[^a-zA-ZÁÉÍÓÚáéíóú]'));
+	SET caracteresNoPermitidos = (SELECT REGEXP_INSTR(tercerNombreIN, '[^a-zA-ZÁÉÍÓÚáéíóúñ]'));
 	IF caracteresNoPermitidos > 0 THEN
 		SET resultado := 'Error, caracteres inválidos en el tercer nombre';
         SELECT resultado;
@@ -436,7 +440,17 @@ this_proc:BEGIN
 	SET id_estado_civilIN := 1;
     SET segundoNombre := segundoNombreIN;
     SET tercerNombre := tercerNombreIN;
-	 #--------------------------------------------------------------------------------------
+    
+    SET fechaActual = CURDATE();
+    
+    SET fechaCorrecta = TIMESTAMPDIFF(DAY, fechaNacimiento, fechaActual);
+
+    IF fechaCorrecta < 0 THEN
+		SET resultado := 'Error, no se puede registrar una persona que no ha nacido';
+        SELECT resultado;
+		LEAVE this_proc;  
+	END IF;
+	#--------------------------------------------------------------------------------------
 
 	#--------------------------------------------------------------------------------------
     #REGISTRAR LA NUEVA PERSONA CON EL CUI PENDIENTE
@@ -523,11 +537,15 @@ this_proc:BEGIN
     DECLARE fechaNacimientoIN DATE;
     DECLARE fechaValida INT;
     DECLARE resultado VARCHAR(100);
+    DECLARE idMatrimonio INT;
+    DECLARE idEsposo INT;
+    DECLARE idEsposa INT;
+    DECLARE genero INT;
     #--------------------------------------------------------------------------------------
     #CONVERTIR CUI NUMERICO A CUI CHAR
     SET cuiIN_char = CAST(cuiIN AS CHAR(13));
     #--------------------------------------------------------------------------------------
-    
+
     #--------------------------------------------------------------------------------------
     #GET EL ID DE LA PERSONA Y VERIFICAR SI EXISTE
     SET idPersonaIN = (SELECT id_persona FROM PERSONA WHERE cui = cuiIN_char);
@@ -567,6 +585,42 @@ this_proc:BEGIN
     WHERE id_persona = idPersonaIN;
     #--------------------------------------------------------------------------------------
     
+    
+    
+    #--------------------------------------------------------------------------------------
+    #VERIFICAR CASAMIENTOS
+    SELECT id_genero INTO genero FROM PERSONA WHERE id_persona = idPersonaIN;
+    
+    IF genero = 1 THEN
+		SELECT id_matrimonio INTO idMatrimonio FROM MATRIMONIO WHERE id_esposo = idPersonaIN
+        AND id_estado_matrimonio = 1;
+        
+        IF idMatrimonio IS NOT NULL THEN
+			SELECT id_esposa INTO idEsposa FROM MATRIMONIO WHERE id_matrimonio = idMatrimonio;
+			UPDATE MATRIMONIO
+				SET id_estado_matrimonio = 2
+				WHERE id_matrimonio = idMatrimonio;
+			UPDATE PERSONA
+				SET id_estado_civil = 4 
+                WHERE id_persona = idEsposa;
+        END IF;
+        
+    ELSEIF genero = 2 THEN
+		SELECT id_matrimonio INTO idMatrimonio FROM MATRIMONIO WHERE id_esposa = idPersonaIN
+        AND id_estado_matrimonio = 1;
+        IF idMatrimonio IS NOT NULL THEN
+			SELECT id_esposo INTO idEsposo FROM MATRIMONIO WHERE id_matrimonio = idMatrimonio;
+			UPDATE MATRIMONIO
+				SET id_estado_matrimonio = 2
+				WHERE id_matrimonio = idMatrimonio;
+			UPDATE PERSONA
+				SET id_estado_civil = 4 
+                WHERE id_persona = idEsposo;
+        END IF;        
+    END IF;
+    #--------------------------------------------------------------------------------------
+    
+    
     #--------------------------------------------------------------------------------------
     #CREAR EL ACTA DE DEFUNCION
     INSERT INTO DEFUNCION (fecha_defuncion,motivo_defuncion,id_persona)
@@ -602,6 +656,10 @@ this_proc:BEGIN
     DECLARE mujerViva INT;
     DECLARE fechaMatrimonioConvertida DATE;
     DECLARE resultado VARCHAR(100);
+    DECLARE fechaDpiHombre DATE;
+    DECLARE fechaDpiMujer DATE;
+    DECLARE fechaCorrectaHombre INT;
+    DECLARE fechaCorrectaMujer INT;
     
     #--------------------------------------------------------------------------------------
     #CONVERTIR LOS CUI NUMERICOS A CHAR
@@ -695,6 +753,28 @@ this_proc:BEGIN
 
     
     #--------------------------------------------------------------------------------------
+    #VERIFICAR QUE SE ESTEN CASANDO SIENDO MAYORES DE EDAD
+    SET fechaMatrimonioConvertida = str_to_date(fechaMatrimonioIN, '%d-%m-%Y');
+    SELECT fecha_emision_dpi INTO fechaDpiHombre FROM DPI WHERE
+    id_dpi = hombreEsMayor;
+    SELECT fecha_emision_dpi INTO fechaDpiMujer FROM DPI WHERE
+    id_dpi = mujerEsMayor;
+    SET fechaCorrectaHombre = TIMESTAMPDIFF(DAY, fechaDpiHombre, fechaMatrimonioConvertida);
+    SET fechaCorrectaMujer =  TIMESTAMPDIFF(DAY, fechaDpiMujer, fechaMatrimonioConvertida);
+    IF fechaCorrectaHombre < 0 THEN
+		SET resultado := CONCAT('Error, fecha incorrecta, no se puede casar antes de recibir el dpi.');
+        SELECT resultado;
+		LEAVE this_proc;	
+    END IF;
+    IF fechaCorrectaMujer < 0 THEN
+		SET resultado := CONCAT('Error, fecha incorrecta, no se puede casar antes de recibir el dpi.');
+        SELECT resultado;
+		LEAVE this_proc;	
+    END IF;
+    #--------------------------------------------------------------------------------------
+    
+    
+    #--------------------------------------------------------------------------------------
     #ACTUALIZAR ESTADO CIVIL DE LOS CASADOS
     UPDATE PERSONA
     SET id_estado_civil = 2
@@ -705,10 +785,8 @@ this_proc:BEGIN
     WHERE id_persona = idMujerIN;
     #--------------------------------------------------------------------------------------
     
-    
     #--------------------------------------------------------------------------------------
     #CREAR EL ACTA DE MATRIMONIO
-    SET fechaMatrimonioConvertida = str_to_date(fechaMatrimonioIN, '%d-%m-%Y');
     INSERT INTO MATRIMONIO (fecha_matrimonio,id_esposo,id_esposa,id_estado_matrimonio)
     VALUES (fechaMatrimonioConvertida,idHombreIN,idMujerIN,1);
     SET resultado = 'Matrimonio registrado con éxito.';
@@ -1355,6 +1433,7 @@ this_proc:BEGIN
     #GET EDAD DE LA PERSONA
     SET fechaNacimiento = (SELECT fecha_nacimiento FROM PERSONA WHERE id_persona = idPersonaIN);
     SET edadPersona = (SELECT TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaRenovacionConvertida));
+
     #--------------------------------------------------------------------------------------
     
     #--------------------------------------------------------------------------------------
@@ -2633,39 +2712,48 @@ DELIMITER ;
 CALL crearPersonaSinPadres('Adama','','','Traore','Valverde','12-12-1995',101,'M');
 CALL crearPersonaSinPadres('Raquel','','','McAdams','Sinphony','12-12-1993',101,'F');
 CALL crearPersonaSinPadres('Benjamin','','','Franklin','Sales','12-12-1993',101,'M');
+CALL crearPersonaSinPadres('Michael','Alexander','','Jackson','Mars','12-12-1988',101,'M');
+CALL crearPersonaSinPadres('Roberto','Carlos','','Penedo','Alvarez','12-12-1988',101,'M');
+CALL crearPersonaSinPadres('Giselle','Karina','','Estevez','Miyares','12-12-1990',1007,'F');
 select * from persona;
 select * from nombre;
 select * from apellido;
+select * from municipio;
 #**********************************************************************************************
 
 #******************************GENERACION DE NUEVO DPI*****************************************
 CALL generarDpi(1000003010101,'21-04-2022',101);
-CALL generarDpi(1000004010101,'21-04-2022',101);
+CALL generarDpi(1000006010101,'21-04-2022',101);
+CALL generarDpi(1000007010101, '24-04-2022',101);
+CALL generarDpi(1000008010101, '24-04-2022',101);
+CALL generarDpi(1000009100710, '24-04-2022',101);
+
 
 select * from dpi;
 #**********************************************************************************************
 
 #**********************************REGISTRAR NACIMIENTO****************************************
-CALL registrarNacimiento(1000003010101,1000004010101,'Albert','Joan','','22-04-2018',101,'M');
+CALL registrarNacimiento(1000008010101,1000009100710,'Amahan','Joddie','','22-04-2023',101,'M');
 select * from persona;
 select * from nombre;
 select * from apellido;
 #**********************************************************************************************
 
 #**********************************REGISTRAR DEFUNCION*****************************************
-CALL addDefuncion(1000000010101,'15-04-2015','Se cayo de la bañera.');
+CALL addDefuncion(1000008010101,'15-04-2021','Se cayo de las gradas.');
 select * from persona;
 select * from defuncion;
 #**********************************************************************************************
 
 
 #**********************************REGISTRAR MATRIMONIO****************************************
-CALL addMatrimonio(1000003010101,1000004010101,'24-04-2019');
+CALL addMatrimonio(1000008010101,1000009100710,'24-04-2020');
+CALL addMatrimonio(1000007010101,1000004010101,'24-05-2020');
 select * from matrimonio;
 #**********************************************************************************************
 
 #**********************************REGISTRAR DIVORCIO******************************************
-CALL addDivorcio(1,'23-04-2020');
+CALL addDivorcio(4,'23-04-2019');
 select * from persona;
 select * from divorcio;
 #**********************************************************************************************
@@ -2674,7 +2762,7 @@ select * from divorcio;
 #**********************************REGISTRAR LICENCIA******************************************
 #1000003010101
 #1000004010101
-CALL addLicencia(1000004010101,'17-04-2017','C');
+CALL addLicencia(1000007010101,'17-04-2017','E');
 select * from licencia;
 select * from catalogo_licencia;
 #**********************************************************************************************
@@ -2689,14 +2777,14 @@ select * from licencia;
 
 
 #**********************************ANULAR LICENCIA*********************************************
-CALL anularLicencia(1,'30-06-2022','Exceso de velocidad.');
+CALL anularLicencia(5,'30-06-20','Exceso de velocidad.');
 select * from anulacion_licencia;
 select * from licencia;
 #**********************************************************************************************
 
 
 #**********************************RENOVAR LICENCIA********************************************
-CALL renewLicencia(3,'24-04-2022','A',3);
+CALL renewLicencia(5,'24-04-2023','B',3);
 select * from persona;
 select * from licencia;
 select * from catalogo_licencia;
@@ -2704,7 +2792,7 @@ select * from catalogo_licencia;
 
 
 #************************************GET NACIMIENTO********************************************
-CALL getNacimiento(1000006010101);
+CALL getNacimiento(1000010010101);
 select * from persona;
 #**********************************************************************************************
 
@@ -2729,14 +2817,14 @@ select * from divorcio;
 
 
 #************************************GET DEFUNCION*********************************************
-CALL getDefuncion(1000000010101);
+CALL getDefuncion(1000003010101);
 select * from persona;
 select * from nombre;
 #**********************************************************************************************
 
 
 #************************************GET MATRIMONIO********************************************
-CALL getMatrimonio(1);
+CALL getMatrimonio(2);
 select * from matrimonio;
 #**********************************************************************************************
 
